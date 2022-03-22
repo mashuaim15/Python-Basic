@@ -1,0 +1,60 @@
+import os
+import logging
+from logging.handlers import TimedRotatingFileHandler
+
+
+# logging.debug('debug message')
+# logging.info('info message')
+# logging.warning('warning message')
+# logging.error('error message')
+# logging.critical('critical message')
+
+#change into directory that the script is in
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+
+
+def create_logger(name, path):
+
+
+    # log_file = '/d01/home/myfolder/2022/{}'.format(name)
+    
+    log_file = path + name
+    
+    #create a instanceL logger
+    logger = logging.getLogger(name='dev')
+    
+    #set logging level
+    logger.setLevel(logging.WARNING)
+    
+    #file hanlder can write log to file, while console hanlder print the log on your terminal. mode = 'a'/'w'  a:append. w:write.
+    file_handler  = logging.FileHandler(log_file, mode='a')
+    console_handler = logging.StreamHandler()
+    
+    # file handler with date management. backupCount: how manys days of logs are kept, when: when to create a new log file
+    date_handler = TimedRotatingFileHandler(log_file, when="midnight", interval=1, backupCount=7, encoding='utf-8')
+    date_handler.suffix = "%Y%m%d"
+    
+    #log formatter
+    formatter = logging.Formatter('%(asctime)s %(filename)s %(levelname)s:%(message)s')
+    
+    # set log formatter
+    file_handler .setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+    date_handler.setFormatter(formatter)
+    
+    #add handler
+    # logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+    logger.addHandler(date_handler)
+
+    return logger
+
+if __name__ == '__main__':
+    create_logger()
+    
+
+# Example:  
+logger = create_logger(name, path) 
+logger.warning('hello python logger')
