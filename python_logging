@@ -20,6 +20,7 @@ def create_logger(name, path):
 
     # log_file = '/d01/home/myfolder/2022/{}'.format(name)
     
+    # where the log file will be stored and whats the name of it
     log_file = path + name
     
     #create a instanceL logger
